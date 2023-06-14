@@ -30,5 +30,41 @@ agentクラスのrunメソッドを呼び出していたのを、agentクラス�
 NamedTuple型の返り値を受けて、そのメンバにアクセスする形で目的を達成します。  
 
 具体的なコード変更部位は以下になります。  
+https://github.com/cosmopolitania/langchain_tutorials/commit/a5ac5a9731ce010d229cb91dc18d63b66ae6df8c
+完成コードはこちらです。  
+https://github.com/cosmopolitania/langchain_tutorials/blob/a5ac5a9731ce010d229cb91dc18d63b66ae6df8c/Leo.py
+
+## デフォルトで使用可能なToolについて
+公式のリストがここにあります。　　
+https://github.com/hwchase17/langchain/blob/master/docs/modules/agents/tools/getting_started.md
+ニュースや天気、映画データベースへのアクセスなど様々なものが提供されています。
+
+### serpAPIの詳細
+先程の例で、実際にはserpAPIには以下のようなURLが送られ、その返答をLLMが処理しています。
+```
+https://serpapi.com/search.json?q=%22Leo%20Dicaprio%20girlfriend%22&hl=en&gl=us
+```
+URLを実際にブラウザで開くと、APIの返答となるjsonを直にみることができます。
+その結果の処理はこちらの _process_response関数で定義されていますが、ここをオーバーライドすることでカスタマイズすることができます。
+https://github.com/hwchase17/langchain/blob/master/langchain/utilities/serpapi.py#L128
+
+## Toolの書き換え、カスタマイズについて
+### より一般的な書き方へ変更
+`load_tools` は名前で呼び出すだけで良くコード量が最小ですみますが、細かい調整には不向きです。  
+まずはより一般的なツールの呼び出し方へ変更します。
+```
+Tool(
+        name = "Search",
+        func=search.run,
+        description="useful for when you need to answer questions about current events"
+    )
+```
+すでにこのように曝露している部分があり、例えばツールの名前を変えたり呼び出し関数を変更することができます。  
+descriptionの記載内容に応じてAgentが使用するツールの優先順位が変わるので、descriptionの変更も結果に影響を及ぼします。
+
+具体的なコード変更部位は以下になります。  
 
 完成コードはこちらです。  
+
+
+### classの一部を修正
