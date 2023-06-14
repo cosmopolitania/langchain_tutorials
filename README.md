@@ -6,6 +6,11 @@
 - OpenAPIキーの取得（有料）
 - SerpAPIキーの取得（月100回の探索まで無料かつ支払い情報不要）
 
+[GoogleのAPIを使う章](https://github.com/cosmopolitania/langchain_tutorials#google-custom-search-engine%E3%81%B8%E3%81%AE%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88)
+以降では、下記のAPIも必要です
+- GoogleCSE(一日100回の呼び出しまで無料かつ支払い情報不要)
+- GoogleAPI(CSEとセットで必要になる)
+
 ### .envファイルの作成
 .env-exampleファイルを参考に、上記で取得したキーを入力してください。  
 入力したら.envにファイル名を変更しましょう。
@@ -67,6 +72,8 @@ https://github.com/cosmopolitania/langchain_tutorials/commit/3282ab0615bc7c5663a
 完成コードはこちらです。  
 https://github.com/cosmopolitania/langchain_tutorials/blob/3282ab0615bc7c5663a659918fd805310fb93b52/Leo.py
 
+[GoogleのAPIを使う章](https://github.com/cosmopolitania/langchain_tutorials#google-custom-search-engine%E3%81%B8%E3%81%AE%E5%88%87%E3%82%8A%E6%9B%BF%E3%81%88)
+のためにこの完成コードをLeo_googleAPI.pyという名前で複製します。
 
 ### classの一部を修正
 serpAPIの返答となる.jsonを解析することで、どのウェブサイトを根拠にAgentが回答を構成しているかわかります。  
@@ -74,3 +81,43 @@ serpAPIの返答となる.jsonを解析することで、どのウェブサイ�
 回答自体は"answer_box"というキーの値を根拠にしていることが多く、同じ例題でも実行した時期によって結果が変わることがあります。（新しい記事が出たときなど）
 
 ### Google Custom Search Engineへの切り替え
+serpAPIは優秀ですが、無料アカウントでは回数の制約が厳しいです。結局検索をgoogleに投げているということからも、Google CSEを併用するのは悪くないアイデアだと思われます。
+変更部位は少ないですが、検索結果の `observation:` がかなり変わりましたので以下に違いを記載します。
+
+#### serpAPIでの探索
+```
+> Entering new AgentExecutor chain...
+ I need to find out who Leo DiCaprio's girlfriend is and then calculate her age raised to the 0.43 power.
+Action: Search
+Action Input: "Leo DiCaprio girlfriend"
+Observation: Leonardo DiCaprio and Gigi Hadid were recently spotted at a pre-Oscars party, sparking interest once again in their rumored romance. The Revenant actor and the model first made headlines when they were spotted together at a New York Fashion Week afterparty in September 2022.
+Thought: I need to find out Gigi Hadid's age.
+
+<中略>
+
+Observation: Answer: 4.1906168361987195
+Thought: I now know the final answer.
+Final Answer: Gigi Hadid's age raised to the 0.43 power is 4.1906168361987195.
+```
+
+#### GoogleAPIでの探索
+```
+> Entering new AgentExecutor chain...
+ I need to find out who Leo DiCaprio's girlfriend is and then calculate her age raised to the 0.43 power.
+Action: Search
+Action Input: "Leo DiCaprio girlfriend"
+Observation: Feb 16, 2023 ... Bridget Hall: 1994 · Naomi Campbell: 1995 · Kristen Zang: 1996 to 1997 · Amber Valletta: 1997 · Helena Christensen: 1997 · Eva Herzigová: 1998. Jun 5, 2023 ... Leonardo DiCaprio seemed to prove a long-held theory about his love life when he broke up with his girlfriend, Camila Morrone, ... Feb 9, 2023 ... The Academy Award winner's love life has made headlines over the past year, particularly after he and his ex-girlfriend Camila Morrone split in ... Apr 16, 2023 ... DiCaprio broke up with girlfriend Camila Morrone, 25, in the summer of 2022, after dating for four years. Bradley Cooper wears white tux to ... 4 days ago ... Speculation about their budding connection came just weeks after DiCaprio's split from his girlfriend of four years, model and actress Camila ... Aug 31, 2022 ... Leonardo DiCaprio's Dating History: From His Relationships With Camila Morrone To Blake Lively · Camila Morrone · Camila Morrone · Camila Morrone. Feb 20, 2023 ... Leonardo DiCaprio's Dating History: Gisele Bundchen, Blake Lively, Camila Morrone · Bridget Hall · Claire Danes · Kristen Zang · Amber Valletta. Feb 6, 2023 ... Last year the actor broke up with his long-term girlfriend, model and actress Camila Morrone, just months after she turned 25. The couple had ... May 24, 2023 ... Turns out the 48-year-old DiCaprio is in the dog house with his friends for spending too much time with his 28-year-old girlfriend Gigi Hadid. May 24, 2023 ... The 48-year-old actor's love life has very much been in the public eye in recent months following the break-up with his girlfriend of four years ...
+Thought: I now know that Leo DiCaprio's girlfriend is Gigi Hadid and she is 28 years old.
+Action: Calculator
+Action Input: 28^0.43
+
+<中略>
+
+Observation: Answer: 4.1906168361987195
+Thought: I now know the final answer
+Final Answer: Leo DiCaprio's girlfriend is Gigi Hadid and her current age raised to the 0.43 power is 4.1906168361987195.
+``` 
+
+具体的なコード変更部位は以下になります。  
+
+完成コードはこちらです。  
