@@ -78,7 +78,18 @@ https://github.com/cosmopolitania/langchain_tutorials/blob/3282ab0615bc7c5663a65
 ### classの一部を修正
 serpAPIの返答となる.jsonを解析することで、どのウェブサイトを根拠にAgentが回答を構成しているかわかります。  
 そもそもserpAPIがgoogleに投げた検索キーや検索条件を知るのも良いでしょう。  
-回答自体は"answer_box"というキーの値を根拠にしていることが多く、同じ例題でも実行した時期によって結果が変わることがあります。（新しい記事が出たときなど）
+回答自体は"answer_box"というキーの値を根拠にしていることが多く、同じ例題でも実行した時期によって結果が変わることがあります。そのため、APIレスポンスを結論と共に保存することを考えてみましょう。  
+修正の考え方は以下になります。
+- APIのレスポンスの中から取り出したい情報をjsonファイルに記録する関数を用意
+- run関数の中で記録関数を呼び出す
+- この新しいrun関数の方をAgentが使用する
+
+具体的なコード変更部位は以下になります。  
+
+完成コードはこちらです。  
+
+実行時に作成されるjsonファイルは[output](https://github.com/cosmopolitania/output)に作成され、サンプルが置いてあります。  
+また、serpAPIのレスポンスの例は[API_responses](https://github.com/cosmopolitania/API_responses)にあります。
 
 ### Google Custom Search Engineへの切り替え
 serpAPIは優秀ですが、無料アカウントでは回数の制約が厳しいです。結局検索をgoogleに投げているということからも、Google CSEを併用するのは悪くないアイデアだと思われます。
