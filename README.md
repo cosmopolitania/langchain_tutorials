@@ -78,18 +78,20 @@ https://github.com/cosmopolitania/langchain_tutorials/blob/3282ab0615bc7c5663a65
 ### classの一部を修正
 serpAPIの返答となる.jsonを解析することで、どのウェブサイトを根拠にAgentが回答を構成しているかわかります。  
 そもそもserpAPIがgoogleに投げた検索キーや検索条件を知るのも良いでしょう。  
-回答自体は"answer_box"というキーの値を根拠にしていることが多く、同じ例題でも実行した時期によって結果が変わることがあります。そのため、APIレスポンスを結論と共に保存することを考えてみましょう。  
+同じ例題でも実行した時期によって結果が変わることがあります。そのため、APIレスポンスを結論と共に保存することを考えてみましょう。  
 修正の考え方は以下になります。
 - APIのレスポンスの中から取り出したい情報をjsonファイルに記録する関数を用意
 - run関数の中で記録関数を呼び出す
 - この新しいrun関数の方をAgentが使用する
 
 具体的なコード変更部位は以下になります。  
+https://github.com/cosmopolitania/langchain_tutorials/commit/cae8a88eb04bc9a8c46b771b95a1088950e78d61#diff-e100247b0b09afc2bde0174762aa739d7679bd9f5abf20810dd7a0cae1b34a9d
 
 完成コードはこちらです。  
+https://github.com/cosmopolitania/langchain_tutorials/blob/cae8a88eb04bc9a8c46b771b95a1088950e78d61/Leo.py
 
-実行時に作成されるjsonファイルは[output](https://github.com/cosmopolitania/output)に作成され、サンプルが置いてあります。  
-また、serpAPIのレスポンスの例は[API_responses](https://github.com/cosmopolitania/API_responses)にあります。
+実行時に作成されるjsonファイルは[output](https://github.com/cosmopolitania/langchain_tutorials/tree/main/output)に作成され、サンプルが置いてあります。  
+また、serpAPIのレスポンスの例は[API_responses](https://github.com/cosmopolitania/langchain_tutorials/tree/main/API_responses)にあります。
 
 ### Google Custom Search Engineへの切り替え
 serpAPIは優秀ですが、無料アカウントでは回数の制約が厳しいです。結局検索をgoogleに投げているということからも、Google CSEを併用するのは悪くないアイデアだと思われます。
@@ -130,5 +132,18 @@ Final Answer: Leo DiCaprio's girlfriend is Gigi Hadid and her current age raised
 ``` 
 
 具体的なコード変更部位は以下になります。  
+https://github.com/cosmopolitania/langchain_tutorials/commit/07d156997cb6ea7be82751ff3e5d9a1f73df3ebb#diff-d1be08a51bf2bc56a8db7e23ea42104463ea41f72fdaadeb29ee0c8603d9238e
 
 完成コードはこちらです。  
+https://github.com/cosmopolitania/langchain_tutorials/blob/07d156997cb6ea7be82751ff3e5d9a1f73df3ebb/Leo_googleAPI.py
+
+### classの一部を修正
+serpAPIと全く同様です。詳細は割愛します。
+
+実行時に作成されるjsonファイルは[output](https://github.com/cosmopolitania/langchain_tutorials/tree/main/output)に作成され、サンプルが置いてあります。  
+また、google search APIのレスポンスの例は[API_responses](https://github.com/cosmopolitania/langchain_tutorials/tree/main/API_responses)にあります。
+
+具体的なコード変更部位は以下になります。  
+
+完成コードはこちらです。  
+
