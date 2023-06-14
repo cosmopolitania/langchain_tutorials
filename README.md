@@ -36,7 +36,7 @@ https://github.com/cosmopolitania/langchain_tutorials/blob/a5ac5a9731ce010d229cb
 
 ## デフォルトで使用可能なToolについて
 公式のリストがここにあります。　　
-https://github.com/hwchase17/langchain/blob/master/docs/modules/agents/tools/getting_started.md
+https://github.com/hwchase17/langchain/blob/master/docs/modules/agents/tools/getting_started.md  
 ニュースや天気、映画データベースへのアクセスなど様々なものが提供されています。
 
 ### serpAPIの詳細
@@ -63,8 +63,14 @@ Tool(
 descriptionの記載内容に応じてAgentが使用するツールの優先順位が変わるので、descriptionの変更も結果に影響を及ぼします。
 
 具体的なコード変更部位は以下になります。  
-
+https://github.com/cosmopolitania/langchain_tutorials/commit/3282ab0615bc7c5663a659918fd805310fb93b52
 完成コードはこちらです。  
+https://github.com/cosmopolitania/langchain_tutorials/blob/3282ab0615bc7c5663a659918fd805310fb93b52/Leo.py
 
 
 ### classの一部を修正
+serpAPIの返答となる.jsonを解析することで、どのウェブサイトを根拠にAgentが回答を構成しているかわかります。  
+そもそもserpAPIがgoogleに投げた検索キーや検索条件を知るのも良いでしょう。  
+回答自体は"answer_box"というキーの値を根拠にしていることが多く、同じ例題でも実行した時期によって結果が変わることがあります。（新しい記事が出たときなど）
+
+### Google Custom Search Engineへの切り替え
