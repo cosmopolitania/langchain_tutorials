@@ -144,6 +144,20 @@ serpAPIと全く同様です。詳細は割愛します。
 また、google search APIのレスポンスの例は[API_responses](https://github.com/cosmopolitania/langchain_tutorials/tree/main/API_responses)にあります。
 
 具体的なコード変更部位は以下になります。  
+https://github.com/cosmopolitania/langchain_tutorials/commit/14c9c6232460a8f4161b4208bfa6deda67513877#diff-d1be08a51bf2bc56a8db7e23ea42104463ea41f72fdaadeb29ee0c8603d9238e
+完成コードはこちらです。  
+https://github.com/cosmopolitania/langchain_tutorials/blob/14c9c6232460a8f4161b4208bfa6deda67513877/Leo_googleAPI.py
+
+## 実験管理ツールの導入
+AimでLangchainの実行ごとの結果や中間ステップにおけるプロンプトの中身などを記録できます。  
+導入には数行追加するだけで済み、結果の再現などがしやすくなるので導入しておくと良いです。
+
+- serpAPIの場合
+具体的なコード変更部位は以下になります。  
 
 完成コードはこちらです。  
 
+- googleAPIの場合
+具体的なコード変更部位は以下になります。  
+
+完成コードはこちらです。  

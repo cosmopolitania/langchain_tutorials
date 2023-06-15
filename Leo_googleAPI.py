@@ -10,10 +10,20 @@ from langchain.agents.tools import Tool
 from dotenv import load_dotenv
 load_dotenv()
 
+import os
+from datetime import datetime
+from langchain.callbacks import AimCallbackHandler, StdOutCallbackHandler
+session_group = datetime.now().strftime("%m.%d.%Y_%H.%M.%S")
+aim_callback = AimCallbackHandler(
+    repo=".",
+    experiment_name="scenario 2: googleAPI/Leo",
+)
+callbacks = [StdOutCallbackHandler(), aim_callback]
+
 import json
 
 def append_answer_to_json(res):
-    file_path = "output/temp_g.json"
+    file_path = "output/temp_g_aim.json"
 
     try:
         with open(file_path, "r") as file:
@@ -43,10 +53,10 @@ def my_run(self, query: str) -> str:
 
     return " ".join(snippets)
 
-llm = OpenAI(temperature=0)
+llm = OpenAI(temperature=0, callbacks=callbacks)
 search = GoogleSearchAPIWrapper()
 GoogleSearchAPIWrapper.my_run = my_run
-llm_math_chain = LLMMathChain.from_llm(llm=llm, verbose=True)
+llm_math_chain = LLMMathChain.from_llm(llm=llm, verbose=True, callbacks=callbacks)
 tools = [
     Tool(
         name = "Search",
@@ -59,10 +69,12 @@ tools = [
         description="useful for when you need to answer questions about math"
     ),
 ]
-agent = initialize_agent(tools, llm, agent="zero-shot-react-description", verbose=True, return_intermediate_steps=True)
-     
+agent = initialize_agent(tools, llm, agent="zero-shot-react-description",
+                         verbose=True, return_intermediate_steps=True, callbacks=callbacks)
+
 
 response = agent({"input":"Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"})
 
-import json
 print(json.dumps(response["intermediate_steps"], indent=2))
+
+aim_callback.flush_tracker(langchain_asset=agent, reset=False, finish=True)
