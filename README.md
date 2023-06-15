@@ -152,12 +152,48 @@ https://github.com/cosmopolitania/langchain_tutorials/blob/14c9c6232460a8f4161b4
 AimでLangchainの実行ごとの結果や中間ステップにおけるプロンプトの中身などを記録できます。  
 導入には数行追加するだけで済み、結果の再現などがしやすくなるので導入しておくと良いです。
 
-- serpAPIの場合
+- serpAPIの場合  
 具体的なコード変更部位は以下になります。  
-
+https://github.com/cosmopolitania/langchain_tutorials/commit/876c36f09048c3cb9585e0393f96619604149f9e#diff-e100247b0b09afc2bde0174762aa739d7679bd9f5abf20810dd7a0cae1b34a9d
 完成コードはこちらです。  
+https://github.com/cosmopolitania/langchain_tutorials/blob/876c36f09048c3cb9585e0393f96619604149f9e/Leo.py
 
-- googleAPIの場合
+- googleAPIの場合  
 具体的なコード変更部位は以下になります。  
-
+https://github.com/cosmopolitania/langchain_tutorials/commit/876c36f09048c3cb9585e0393f96619604149f9e#diff-d1be08a51bf2bc56a8db7e23ea42104463ea41f72fdaadeb29ee0c8603d9238e
 完成コードはこちらです。  
+https://github.com/cosmopolitania/langchain_tutorials/blob/876c36f09048c3cb9585e0393f96619604149f9e/Leo_googleAPI.py
+
+## Prompt エンジニアリングに向けて
+ここまで選択してきている `zero-shot-react-description` は、そもそも以下のようなPromptを使用しています。  
+```
+Answer the following questions as best you can. You have access to the following tools:
+
+Search: useful for when you need to answer questions about current events
+Calculator: useful for when you need to answer questions about math
+
+Use the following format:
+
+Question: the input question you must answer
+Thought: you should always think about what to do
+Action: the action to take, should be one of [Search, Calculator]
+Action Input: the input to the action
+Observation: the result of the action
+... (this Thought/Action/Action Input/Observation can repeat N times)
+Thought: I now know the final answer
+Final Answer: the final answer to the original input question
+
+Begin!
+
+Question: Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?
+Thought:
+```
+これは `print(agent)` などとして標準出力上でも確認できますが、先程の実験管理ツールAimを使えば　`(Runs) > Text > on_llm_start` で確認できます。  
+`initialize_agent` により、選択されたエージェントに合わせてそれぞれ異なるプロンプトが使用されます。このプロンプトをカスタマイズすることで、より意図にあった検索や思考をさせることができるため、まずは使われるプロンプトを直接指定するように書き換えましょう。  
+変更が多いので2ステップにわけてコード変更を追います。
+
+### initialize_agent -> from_agent_and_tools 
+- agentとして`zero-shot-react-description` を使うこと
+- 使用許可されたtools（本例では `Search`, `Calculator`）
+この二点が決まれば、agentのクラス(ZeroShotAgent)のメンバ関数from_llm_and_toolsがinitialize_agentと同じ役割を果たします。  
+書き換え部位は以下のようになっています。

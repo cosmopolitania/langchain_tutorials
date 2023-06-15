@@ -16,14 +16,14 @@ from langchain.callbacks import AimCallbackHandler, StdOutCallbackHandler
 session_group = datetime.now().strftime("%m.%d.%Y_%H.%M.%S")
 aim_callback = AimCallbackHandler(
     repo=".",
-    experiment_name="scenario 1: serpAPI/Leo",
+    experiment_name="Prompt 1: serpAPI/Leo",
 )
 callbacks = [StdOutCallbackHandler(), aim_callback]
 
 import json
 
 def append_answer_to_json(res):
-    file_path = "output/temp_s_aim.json"
+    file_path = "output/temp_s_prompt.json"
 
     try:
         with open(file_path, "r") as file:
@@ -64,8 +64,16 @@ tools = [
         description="useful for when you need to answer questions about math"
     ),
 ]
-agent = initialize_agent(tools, llm, agent="zero-shot-react-description",
-                         verbose=True, return_intermediate_steps=True, callbacks=callbacks)
+# agent = initialize_agent(tools, llm, agent="zero-shot-react-description",
+#                          verbose=True, return_intermediate_steps=True, callbacks=callbacks)
+from langchain.agents.agent import AgentExecutor
+from langchain.agents.mrkl.base import ZeroShotAgent
+agent = AgentExecutor.from_agent_and_tools(
+        agent=ZeroShotAgent.from_llm_and_tools(llm, tools),
+        tools=tools,
+        callbacks=callbacks,
+        verbose=True, return_intermediate_steps=True
+    )
 
 response = agent({"input":"Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"})
 
