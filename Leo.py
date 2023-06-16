@@ -67,9 +67,42 @@ tools = [
 # agent = initialize_agent(tools, llm, agent="zero-shot-react-description",
 #                          verbose=True, return_intermediate_steps=True, callbacks=callbacks)
 from langchain.agents.agent import AgentExecutor
+from langchain.agents.mrkl.output_parser import MRKLOutputParser
+from langchain import PromptTemplate, LLMChain
 from langchain.agents.mrkl.base import ZeroShotAgent
+PREFIX = """Answer the following questions in Japanese as best you can. You have access to the following tools:"""
+FORMAT_INSTRUCTIONS = """Use the following format:
+
+Question: the input question you must answer
+Thought: you should always think about what to do
+Action: the action to take, should be one of [{tool_names}]
+Action Input: the input to the action
+Observation: the result of the action
+... (this Thought/Action/Action Input/Observation can repeat N times)
+Thought: I now know the final answer
+Final Answer: the final answer to the original input question"""
+SUFFIX = """Begin!
+
+Question: {input}
+Thought:{agent_scratchpad}"""
+
+tool_strings = "\n".join([f"{tool.name}: {tool.description}" for tool in tools])
+tool_names = ", ".join([tool.name for tool in tools])
+format_instructions = FORMAT_INSTRUCTIONS.format(tool_names=tool_names)
+template = "\n\n".join([PREFIX, tool_strings, format_instructions, SUFFIX])
+
+llm_chain = LLMChain(
+    llm=llm,
+    prompt=PromptTemplate(template=template, input_variables=["input", "agent_scratchpad"]),
+    callbacks=callbacks,
+)
+zero_shot = ZeroShotAgent(
+    llm_chain=llm_chain,
+    allowed_tools=[tool.name for tool in tools],
+    output_parser=MRKLOutputParser()
+)
 agent = AgentExecutor.from_agent_and_tools(
-        agent=ZeroShotAgent.from_llm_and_tools(llm, tools),
+        agent=zero_shot,
         tools=tools,
         callbacks=callbacks,
         verbose=True, return_intermediate_steps=True

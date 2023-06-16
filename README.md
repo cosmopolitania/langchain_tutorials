@@ -35,7 +35,7 @@ agentクラスのrunメソッドを呼び出していたのを、agentクラス�
 NamedTuple型の返り値を受けて、そのメンバにアクセスする形で目的を達成します。  
 
 具体的なコード変更部位は以下になります。  
-https://github.com/cosmopolitania/langchain_tutorials/commit/a5ac5a9731ce010d229cb91dc18d63b66ae6df8c
+https://github.com/cosmopolitania/langchain_tutorials/commit/a5ac5a9731ce010d229cb91dc18d63b66ae6df8c  
 完成コードはこちらです。  
 https://github.com/cosmopolitania/langchain_tutorials/blob/a5ac5a9731ce010d229cb91dc18d63b66ae6df8c/Leo.py
 
@@ -68,7 +68,7 @@ Tool(
 descriptionの記載内容に応じてAgentが使用するツールの優先順位が変わるので、descriptionの変更も結果に影響を及ぼします。
 
 具体的なコード変更部位は以下になります。  
-https://github.com/cosmopolitania/langchain_tutorials/commit/3282ab0615bc7c5663a659918fd805310fb93b52
+https://github.com/cosmopolitania/langchain_tutorials/commit/3282ab0615bc7c5663a659918fd805310fb93b52  
 完成コードはこちらです。  
 https://github.com/cosmopolitania/langchain_tutorials/blob/3282ab0615bc7c5663a659918fd805310fb93b52/Leo.py
 
@@ -85,8 +85,7 @@ serpAPIの返答となる.jsonを解析することで、どのウェブサイ�
 - この新しいrun関数の方をAgentが使用する
 
 具体的なコード変更部位は以下になります。  
-https://github.com/cosmopolitania/langchain_tutorials/commit/cae8a88eb04bc9a8c46b771b95a1088950e78d61#diff-e100247b0b09afc2bde0174762aa739d7679bd9f5abf20810dd7a0cae1b34a9d
-
+https://github.com/cosmopolitania/langchain_tutorials/commit/cae8a88eb04bc9a8c46b771b95a1088950e78d61#diff-e100247b0b09afc2bde0174762aa739d7679bd9f5abf20810dd7a0cae1b34a9d  
 完成コードはこちらです。  
 https://github.com/cosmopolitania/langchain_tutorials/blob/cae8a88eb04bc9a8c46b771b95a1088950e78d61/Leo.py
 
@@ -132,8 +131,7 @@ Final Answer: Leo DiCaprio's girlfriend is Gigi Hadid and her current age raised
 ``` 
 
 具体的なコード変更部位は以下になります。  
-https://github.com/cosmopolitania/langchain_tutorials/commit/07d156997cb6ea7be82751ff3e5d9a1f73df3ebb#diff-d1be08a51bf2bc56a8db7e23ea42104463ea41f72fdaadeb29ee0c8603d9238e
-
+https://github.com/cosmopolitania/langchain_tutorials/commit/07d156997cb6ea7be82751ff3e5d9a1f73df3ebb#diff-d1be08a51bf2bc56a8db7e23ea42104463ea41f72fdaadeb29ee0c8603d9238e  
 完成コードはこちらです。  
 https://github.com/cosmopolitania/langchain_tutorials/blob/07d156997cb6ea7be82751ff3e5d9a1f73df3ebb/Leo_googleAPI.py
 
@@ -144,7 +142,7 @@ serpAPIと全く同様です。詳細は割愛します。
 また、google search APIのレスポンスの例は[API_responses](https://github.com/cosmopolitania/langchain_tutorials/tree/main/API_responses)にあります。
 
 具体的なコード変更部位は以下になります。  
-https://github.com/cosmopolitania/langchain_tutorials/commit/14c9c6232460a8f4161b4208bfa6deda67513877#diff-d1be08a51bf2bc56a8db7e23ea42104463ea41f72fdaadeb29ee0c8603d9238e
+https://github.com/cosmopolitania/langchain_tutorials/commit/14c9c6232460a8f4161b4208bfa6deda67513877#diff-d1be08a51bf2bc56a8db7e23ea42104463ea41f72fdaadeb29ee0c8603d9238e  
 完成コードはこちらです。  
 https://github.com/cosmopolitania/langchain_tutorials/blob/14c9c6232460a8f4161b4208bfa6deda67513877/Leo_googleAPI.py
 
@@ -154,13 +152,13 @@ AimでLangchainの実行ごとの結果や中間ステップにおけるプロ�
 
 - serpAPIの場合  
 具体的なコード変更部位は以下になります。  
-https://github.com/cosmopolitania/langchain_tutorials/commit/876c36f09048c3cb9585e0393f96619604149f9e#diff-e100247b0b09afc2bde0174762aa739d7679bd9f5abf20810dd7a0cae1b34a9d
+https://github.com/cosmopolitania/langchain_tutorials/commit/876c36f09048c3cb9585e0393f96619604149f9e#diff-e100247b0b09afc2bde0174762aa739d7679bd9f5abf20810dd7a0cae1b34a9d  
 完成コードはこちらです。  
 https://github.com/cosmopolitania/langchain_tutorials/blob/876c36f09048c3cb9585e0393f96619604149f9e/Leo.py
 
 - googleAPIの場合  
 具体的なコード変更部位は以下になります。  
-https://github.com/cosmopolitania/langchain_tutorials/commit/876c36f09048c3cb9585e0393f96619604149f9e#diff-d1be08a51bf2bc56a8db7e23ea42104463ea41f72fdaadeb29ee0c8603d9238e
+https://github.com/cosmopolitania/langchain_tutorials/commit/876c36f09048c3cb9585e0393f96619604149f9e#diff-d1be08a51bf2bc56a8db7e23ea42104463ea41f72fdaadeb29ee0c8603d9238e  
 完成コードはこちらです。  
 https://github.com/cosmopolitania/langchain_tutorials/blob/876c36f09048c3cb9585e0393f96619604149f9e/Leo_googleAPI.py
 
@@ -196,4 +194,22 @@ Thought:
 - agentとして`zero-shot-react-description` を使うこと
 - 使用許可されたtools（本例では `Search`, `Calculator`）
 この二点が決まれば、agentのクラス(ZeroShotAgent)のメンバ関数from_llm_and_toolsがinitialize_agentと同じ役割を果たします。  
-書き換え部位は以下のようになっています。
+書き換え部位は以下のようになっています。  
+https://github.com/cosmopolitania/langchain_tutorials/commit/595b8cd63c609217046458f63ce5a36a8b8ae6ea#diff-e100247b0b09afc2bde0174762aa739d7679bd9f5abf20810dd7a0cae1b34a9d  
+
+### from_agent_and_tools -> PromptTemplate
+- PREFIX, FORMAT_INSTRUCTIONS, SUFFIX を直接記載
+- 命令文をtools部分について成形した後、PromptTemplate関数によるプロンプト作成
+- ZeroShotAgentのインスタンス化の際に作成したプロンプトを使用する  
+このような手続きにより、`initialize_agent` を使用した時と全く同じ結果が得られるようになります。  
+書き換え部位は以下のようになっています。  
+
+プロンプトを変更してLLMが作成している回答部位を日本語へ翻訳するように指定してみましょう。
+書き換え部位は以下のようになっています。  
+
+結果は以下のようになり、 `Thought:` と `Final Answer:` の部位が日本語で返ってくるようになりました。
+
+少しコード記述が長いため、ZeroShotAgentクラスをオーバーライドするやり方にします。  
+具体的なコード変更部位は以下になります。  
+
+完成コードはこちらです。  
