@@ -233,8 +233,10 @@ Final Answer: レオ・ディカプリオの彼女は、ジジ・ハディッド
 ```
 少しコード記述が長いため、ZeroShotAgentクラスをオーバーライドするやり方にします。  
 具体的なコード変更部位は以下になります。  
- 
+https://github.com/cosmopolitania/langchain_tutorials/commit/a7491c2fe5b3392797414fe3b2bf404d65179e4c#diff-e100247b0b09afc2bde0174762aa739d7679bd9f5abf20810dd7a0cae1b34a9d  
+
 完成コードはこちらです。  
+https://github.com/cosmopolitania/langchain_tutorials/blob/a7491c2fe5b3392797414fe3b2bf404d65179e4c/Leo.py  
 
 **注意**
 翻訳を強要すると、以下のようなエラーがでることがあります。
@@ -251,4 +253,7 @@ SUFFIX = """Begin! Final Answer must be translated in Japanese, and 語尾には
 ```
 SUFFIX = """Begin! Answer must be translated in Japanese, and 語尾には"なのだ"を使用してください
 ```
-このプロンプトだと問題無かったです。
+このプロンプトだと問題無かったです。 
+
+全く同様にしてgoogleAPIの方もPromptエンジニアリングできるようにしました。  
+完成コードはこちらです。
