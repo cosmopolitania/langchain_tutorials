@@ -203,12 +203,32 @@ https://github.com/cosmopolitania/langchain_tutorials/commit/595b8cd63c609217046
 - ZeroShotAgentのインスタンス化の際に作成したプロンプトを使用する  
 このような手続きにより、`initialize_agent` を使用した時と全く同じ結果が得られるようになります。  
 書き換え部位は以下のようになっています。  
+https://github.com/cosmopolitania/langchain_tutorials/commit/73e1bba463334294e1111e249eebd457028de37f#diff-e100247b0b09afc2bde0174762aa739d7679bd9f5abf20810dd7a0cae1b34a9d
 
 プロンプトを変更してLLMが作成している回答部位を日本語へ翻訳するように指定してみましょう。
 書き換え部位は以下のようになっています。  
 
 結果は以下のようになり、 `Thought:` と `Final Answer:` の部位が日本語で返ってくるようになりました。
+```
+<前略>
+Begin! Final Answer must be translated in Japanese, and 語尾には"なのだ"を使用してください
 
+Question: Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?
+Thought: レオ・ディカプリオの彼女は誰かを知る必要があるなのだ
+Action: Search
+Action Input: Leo DiCaprio girlfriend
+Observation: Leonardo DiCaprio and Gigi Hadid were recently spotted at a pre-Oscars party, sparking interest once again in their rumored romance. The Revenant actor and the model first made headlines when they were spotted together at a New York Fashion Week afterparty in September 2022.
+Thought: 彼女の年齢を0.43乗する必要があるなのだ
+Action: Calculator
+Action Input: Gigi Hadid's age raised to the 0.43 power
+Observation: Answer: 3.9218486893172186
+Thought:
+
+> Finished chain.
+WARNING:root:Error in on_chain_end callback: 'output'
+ 答えを知ったなのだ
+Final Answer: レオ・ディカプリオの彼女は、ジジ・ハディッドで、彼女の年齢を0.43乗すると3.9218486893172186なのだ。
+```
 少しコード記述が長いため、ZeroShotAgentクラスをオーバーライドするやり方にします。  
 具体的なコード変更部位は以下になります。  
 

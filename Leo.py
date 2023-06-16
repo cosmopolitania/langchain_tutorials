@@ -73,15 +73,15 @@ from langchain.agents.mrkl.base import ZeroShotAgent
 PREFIX = """Answer the following questions in Japanese as best you can. You have access to the following tools:"""
 FORMAT_INSTRUCTIONS = """Use the following format:
 
-Question: the input question you must answer
-Thought: you should always think about what to do
+Question: the input question you must answer.
+Thought: you should always think about what to do, must be translated in Japanese
 Action: the action to take, should be one of [{tool_names}]
 Action Input: the input to the action
 Observation: the result of the action
 ... (this Thought/Action/Action Input/Observation can repeat N times)
-Thought: I now know the final answer
+Thought: I now know the final answer, must be translated in Japanese
 Final Answer: the final answer to the original input question"""
-SUFFIX = """Begin!
+SUFFIX = """Begin! Final Answer must be translated in Japanese, and 語尾には"なのだ"を使用してください
 
 Question: {input}
 Thought:{agent_scratchpad}"""
