@@ -207,7 +207,9 @@ https://github.com/cosmopolitania/langchain_tutorials/commit/73e1bba463334294e11
 
 プロンプトを変更してLLMが作成している回答部位を日本語へ翻訳するように指定してみましょう。
 書き換え部位は以下のようになっています。  
+https://github.com/cosmopolitania/langchain_tutorials/commit/788e547758ac56ffc2f4202d14fb77415e8ccfa3#diff-e100247b0b09afc2bde0174762aa739d7679bd9f5abf20810dd7a0cae1b34a9d  
 
+参考まで: [Prompt->Agent->AgentExecutorの一連の流れ](https://github.com/cosmopolitania/langchain_tutorials/blob/788e547758ac56ffc2f4202d14fb77415e8ccfa3/Leo.py#L94-L109)  
 結果は以下のようになり、 `Thought:` と `Final Answer:` の部位が日本語で返ってくるようになりました。
 ```
 <前略>
@@ -231,5 +233,22 @@ Final Answer: レオ・ディカプリオの彼女は、ジジ・ハディッド
 ```
 少しコード記述が長いため、ZeroShotAgentクラスをオーバーライドするやり方にします。  
 具体的なコード変更部位は以下になります。  
-
+ 
 完成コードはこちらです。  
+
+**注意**
+翻訳を強要すると、以下のようなエラーがでることがあります。
+```
+langchain.schema.OutputParserException: Could not parse LLM output: ` ギジ・ハディッドの現在の年齢を0.43乗した答えが4.1906168361987195なのだ。`
+```
+答えが無事に翻訳されているものの、 `Final Answer:` のようなAI回答のprefixがなくなってしまい、最終回答と認識できずにエラーが生じている形になります。 
+ちょっとしたプロンプトの表現でこういったことになりますので注意してください。  
+実装時の実験では、
+```
+SUFFIX = """Begin! Final Answer must be translated in Japanese, and 語尾には"なのだ"を使用してください
+```
+このプロンプトだとエラーになり、
+```
+SUFFIX = """Begin! Answer must be translated in Japanese, and 語尾には"なのだ"を使用してください
+```
+このプロンプトだと問題無かったです。
