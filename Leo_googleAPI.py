@@ -16,14 +16,13 @@ from langchain.callbacks import AimCallbackHandler, StdOutCallbackHandler
 session_group = datetime.now().strftime("%m.%d.%Y_%H.%M.%S")
 aim_callback = AimCallbackHandler(
     repo=".",
-    experiment_name="scenario 2: googleAPI/Leo",
+    experiment_name="DocComp: googleAPI/Leo",
 )
 callbacks = [StdOutCallbackHandler(), aim_callback]
 
 import json
-
-def append_answer_to_json(res):
-    file_path = "output/temp_g_prompt.json"
+file_path = "output/temp_g_prompt.json"
+def append_answer_to_json(res, file_path=file_path):
 
     try:
         with open(file_path, "r") as file:
@@ -37,8 +36,8 @@ def append_answer_to_json(res):
     data.setdefault("link", []).append(res["link"])
     data.setdefault("snippet", []).append(res["snippet"])
 
-    with open(file_path, "w") as file:
-        json.dump(data, file)
+    with open(file_path, "w", encoding="utf8") as file:
+        json.dump(data, file, ensure_ascii=False)
 
 def my_run(self, query: str) -> str:
     """Run query through GoogleSearch and parse result."""
@@ -73,7 +72,7 @@ tools = [
 #                          verbose=True, return_intermediate_steps=True, callbacks=callbacks)
 from langchain.agents.agent import AgentExecutor
 from langchain.agents.mrkl.base import ZeroShotAgent
-PREFIX = """Answer the following questions in Japanese as best you can. You have access to the following tools:"""
+PREFIX = """Answer the following questions as best you can. You have access to the following tools:"""
 FORMAT_INSTRUCTIONS = """Use the following format:
 
 Question: the input question you must answer.
@@ -100,5 +99,50 @@ agent = AgentExecutor.from_agent_and_tools(
 response = agent({"input":"Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"})
 
 print(json.dumps(response["intermediate_steps"], indent=2, ensure_ascii=False))
+
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.document_loaders import UnstructuredURLLoader
+from langchain.chains import RetrievalQA, RetrievalQAWithSourcesChain
+from langchain.chains.question_answering import load_qa_chain
+from langchain.memory import ChatMessageHistory
+from langchain.vectorstores import FAISS
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.schema import messages_to_dict, AIMessage
+
+with open(file_path, "r", encoding="utf8") as f:
+    data = json.load(f)
+documents = UnstructuredURLLoader(urls=data["link"]).load()
+
+text_splitter = CharacterTextSplitter(chunk_size=2000, chunk_overlap=0, separator="\n")
+texts = text_splitter.split_documents(documents)
+print(len(texts))
+
+embeddings = OpenAIEmbeddings()
+
+if(os.path.exists("./faiss_index_leo") == False):
+    db = FAISS.from_documents(texts, embeddings)
+    db.save_local("faiss_index_leo")
+vectorDB = FAISS.load_local("faiss_index_leo", embeddings)
+
+qa = RetrievalQAWithSourcesChain.from_llm(llm=llm, retriever=vectorDB.as_retriever())
+history = ChatMessageHistory()
+while True:
+    input_txt = input("質問を入力してください: ")
+    if(input_txt == "exit"):
+        break
+    elif(input_txt == ""):
+        continue
+    response = qa({"question": input_txt})
+    print(response)
+    history.add_user_message(input_txt)
+    answer_message = AIMessage(content=response['answer'])
+    answer_message.additional_kwargs['sources'] = response['sources']
+    history.add_message(answer_message)
+
+with open("output/leo_g_history.json", "w", encoding="utf8") as f:
+    dicts = messages_to_dict(history.messages)
+    formater = json.dumps(dicts, indent=2, ensure_ascii=False)
+    print(formater)
+    f.write(formater)
 
 aim_callback.flush_tracker(langchain_asset=agent, reset=False, finish=True)

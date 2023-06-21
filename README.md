@@ -256,4 +256,29 @@ SUFFIX = """Begin! Answer must be translated in Japanese, and 語尾には"な�
 このプロンプトだと問題無かったです。 
 
 全く同様にしてgoogleAPIの方もPromptエンジニアリングできるようにしました。  
-完成コードはこちらです。
+完成コードはこちらです。  
+https://github.com/cosmopolitania/langchain_tutorials/blob/ef37581215dc87df44fe35df025b1ca71523beb9/Leo_googleAPI.py  
+
+## 検索結果からvector storeを構築し、さらなるQAへ対応
+Agent ChainによるWeb検索では、Search APIが返すsnippetの情報で回答を作成しており、ヒットしたページの内容全体を読み込んで回答をしているわけではないようです。  
+そのため、 `彼女は誰か → その年齢は → その階乗は` というステップはこなせても、ページの内容全体を踏まえる必要がある複雑な命令には十分な品質の回答を出せませんでした。そのような課題に対し、以下のアプローチを追加してみます。  
+1. Agent chainにより、検索上位のサイトアドレスを集める
+1. URLLoaderにより上位のサイトを全て読み込み、vector storeを作成
+1. (関連性のあるサイトに絞る : contextual compression)
+1. 新たなQAを行うLLMを作成する。このLLMはvector storeの中身を使用して回答
+
+### FAISS
+上記の1,2,4点目の実装をまとめて実施。vector storeはchromaDB, FAISS, pinecone(有料)などがありますが、ここではFAISSで実装します。  
+- Agent Chainでは10個(変更可能)のヒットを返すgoogle APIを使用する
+- RetrievalQAWithSourcesChainにより、どのサイトを根拠にAI回答が作られたかを明示
+- AI messageにsourceも格納
+
+なお、実行方法は以下になります。exitと記載すればQAを終了します。
+``` 
+>> python Leo_googleAPI.py
+```
+完成コードはこちらです。  
+
+
+
+### Contextual Compressor
